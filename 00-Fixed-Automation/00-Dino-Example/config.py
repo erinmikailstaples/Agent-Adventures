@@ -19,8 +19,6 @@ OUTPUT_DIR = "weather_reports"  # Directory to save weather reports
 AGENT_NAME = "Fixed Automation Weather Agent"
 AGENT_VERSION = "1.0.0"
 AGENT_TYPE = "Level -1: Fixed Automation"
-NAME = "Dino Facts Agent"  # Agent name for dinosaur facts
-DESCRIPTION = "A fixed automation agent that fetches dinosaur facts and generates reports"
 
 # API Settings
 API_BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
