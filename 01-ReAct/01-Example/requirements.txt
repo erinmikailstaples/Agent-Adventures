@@ -1,0 +1,14 @@
+# ReAct Weather Planning Agent Dependencies
+
+# Core dependencies
+requests>=2.31.0  # For API calls to Ollama and weather services
+python-dateutil>=2.8.2  # For date/time handling
+
+# Optional dependencies for enhanced functionality
+# Uncomment these if you want to use real weather data
+# openweathermap>=1.0.0  # For real weather data (if you have an API key)
+
+# Development dependencies (optional)
+# pytest>=7.0.0  # For testing
+# black>=23.0.0  # For code formatting
+# flake8>=6.0.0  # For linting
