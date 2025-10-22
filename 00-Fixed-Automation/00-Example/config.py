@@ -7,7 +7,9 @@ environment variables or a configuration file.
 """
 
 # API Configuration
-API_KEY = "your_openweathermap_api_key_here"  # Replace with your actual API key
+OLLAMA_BASE_URL = "http://localhost:11434"  # Ollama server URL
+OLLAMA_MODEL = "llama3.2"  # Ollama model to use (llama3.2, mistral, codellama, etc.)
+WEATHER_API_KEY = "your_openweathermap_api_key_here"  # Optional: for real weather data
 CITY = "London"  # Default city to fetch weather for
 
 # Output Configuration
@@ -22,6 +24,11 @@ AGENT_TYPE = "Level -1: Fixed Automation"
 API_BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
 API_TIMEOUT = 10  # seconds
 API_UNITS = "metric"  # metric, imperial, or kelvin
+
+# Ollama Settings
+OLLAMA_TIMEOUT = 60  # seconds (Ollama can be slower)
+OLLAMA_STREAM = False  # Set to True for streaming responses
+OLLAMA_KEEP_ALIVE = "5m"  # Keep model in memory for 5 minutes
 
 # Report Settings
 REPORT_FORMAT = "text"  # text, json, or html

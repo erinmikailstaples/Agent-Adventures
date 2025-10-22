@@ -2,12 +2,22 @@
 
 ## Overview
 
-This example demonstrates a **Level -1: Fixed Automation** agent that fetches weather data from an API and generates a simple report. This agent follows rigid, pre-programmed instructions without any intelligence or adaptation.
+This example demonstrates a **Level -1: Fixed Automation** agent that fetches weather data from an API and generates a simple report. This agent follows rigid, pre-programmed instructions without any intelligence or adaptation, but is enhanced with **Ollama** for better report generation.
+
+### Why Ollama Enhancement?
+
+- **🆓 Free**: No API costs for report enhancement
+- **🔒 Private**: All processing happens locally
+- **⚡ Fast**: No network latency for LLM calls
+- **🛠️ Customizable**: Use any compatible model
+- **📱 Offline**: Works without internet connection
+- **📈 Better Reports**: AI-generated weather summaries
 
 ## What This Agent Does
 
 - Fetches weather data from OpenWeatherMap API
 - Generates a simple text report
+- **Enhanced with Ollama** for AI-generated weather summaries
 - Saves the report to a file
 - Runs on a fixed schedule (every hour)
 
@@ -51,9 +61,27 @@ graph TD
 
 ## Usage
 
-1. Install dependencies: `pip install -r requirements.txt`
-2. Set up your API key in `config.py`
-3. Run the agent: `python weather_agent.py`
+1. **Install Ollama**: Visit [ollama.ai](https://ollama.ai/) and install Ollama
+2. **Setup Ollama**: Run `python setup_ollama.py` to download the required model
+3. **Install dependencies**: `pip install -r requirements.txt`
+4. **Set up your API key** in `config.py` (optional)
+5. **Run the agent**: `python weather_agent.py`
+
+### Quick Start with Ollama
+
+```bash
+# Install Ollama (if not already installed)
+# Visit https://ollama.ai/ and follow installation instructions
+
+# Setup the required model
+python setup_ollama.py
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Run the agent
+python weather_agent.py
+```
 
 ## Limitations
 

@@ -1,0 +1,20 @@
+# LLM-Enhanced Weather Agent Dependencies
+
+# Core dependencies
+requests>=2.31.0           # For API calls and Ollama integration
+python-dateutil>=2.8.2    # For date/time handling
+
+# Optional dependencies for enhanced functionality
+# (Note: LLM-Enhanced agents typically don't use these)
+# pandas>=2.0.0            # For data manipulation (not used in LLM-Enhanced)
+# numpy>=1.24.0           # For numerical operations (not used in LLM-Enhanced)
+# matplotlib>=3.7.0       # For plotting (not used in LLM-Enhanced)
+
+# Development dependencies (optional)
+# pytest>=7.4.0         # For testing
+# black>=23.0.0         # For code formatting
+# flake8>=6.0.0         # For linting
+
+# Note: LLM-Enhanced agents typically have minimal dependencies
+# as they rely primarily on LLM capabilities rather than complex
+# data processing or tool integration

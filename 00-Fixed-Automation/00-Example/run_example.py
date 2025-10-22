@@ -46,12 +46,24 @@ def demonstrate_fixed_automation():
     print()
     
     # Check if API key is set
-    if API_KEY == "your_openweathermap_api_key_here":
-        print("⚠️  WARNING: API key not set!")
+    if WEATHER_API_KEY == "your_openweathermap_api_key_here":
+        print("⚠️  WARNING: Weather API key not set!")
         print("   Please set your OpenWeatherMap API key in config.py")
         print("   Get a free API key at: https://openweathermap.org/api")
+        print("   Note: The agent will use mock data if no API key is provided")
         print()
-        return False
+    
+    # Check if Ollama is available (optional enhancement)
+    try:
+        import requests
+        response = requests.get(f"{OLLAMA_BASE_URL}/api/tags", timeout=5)
+        if response.status_code == 200:
+            print("✅ Ollama is available - reports will be enhanced with AI")
+        else:
+            print("⚠️  Ollama not responding - using basic report format")
+    except Exception as e:
+        print("⚠️  Ollama not available - using basic report format")
+        print("   Install Ollama from https://ollama.ai/ for enhanced reports")
     
     # Create and run the agent
     agent = WeatherReporterAgent()

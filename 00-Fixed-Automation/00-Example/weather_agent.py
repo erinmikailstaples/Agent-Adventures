@@ -16,7 +16,16 @@ import requests
 import json
 import datetime
 import os
-from config import API_KEY, CITY, OUTPUT_DIR
+from config import (
+    OLLAMA_BASE_URL, 
+    OLLAMA_MODEL, 
+    WEATHER_API_KEY, 
+    CITY, 
+    OUTPUT_DIR,
+    OLLAMA_TIMEOUT,
+    OLLAMA_STREAM,
+    OLLAMA_KEEP_ALIVE
+)
 
 
 class WeatherReporterAgent:
@@ -31,7 +40,9 @@ class WeatherReporterAgent:
     """
     
     def __init__(self):
-        self.api_key = API_KEY
+        self.ollama_base_url = OLLAMA_BASE_URL
+        self.model = OLLAMA_MODEL
+        self.api_key = WEATHER_API_KEY
         self.city = CITY
         self.output_dir = OUTPUT_DIR
         self.base_url = "http://api.openweathermap.org/data/2.5/weather"
@@ -95,20 +106,114 @@ class WeatherReporterAgent:
         
         return parsed_data
     
+    def _call_ollama_api(self, prompt: str, system_prompt: str = None) -> str:
+        """
+        Call the Ollama API to get LLM responses.
+        
+        This method demonstrates Fixed Automation with LLM enhancement:
+        - Local LLM processing for report generation
+        - Cost-effective AI inference
+        - Privacy-preserving AI
+        """
+        try:
+            # Prepare the request payload
+            payload = {
+                "model": self.model,
+                "prompt": prompt,
+                "stream": OLLAMA_STREAM,
+                "options": {
+                    "temperature": 0.7,
+                    "top_p": 0.9,
+                    "num_predict": 300
+                }
+            }
+            
+            # Add system prompt if provided
+            if system_prompt:
+                payload["system"] = system_prompt
+            
+            # Make the API call
+            response = requests.post(
+                f"{self.ollama_base_url}/api/generate",
+                json=payload,
+                timeout=OLLAMA_TIMEOUT
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result.get("response", "")
+            else:
+                raise Exception(f"Ollama API error: {response.status_code} - {response.text}")
+                
+        except requests.exceptions.ConnectionError:
+            raise Exception("Cannot connect to Ollama. Make sure Ollama is running on localhost:11434")
+        except requests.exceptions.Timeout:
+            raise Exception("Ollama request timed out. The model might be too slow or not loaded.")
+        except Exception as e:
+            raise Exception(f"Error calling Ollama API: {e}")
+    
     def generate_report(self, parsed_data):
         """
-        Generate a fixed-format weather report.
+        Generate a fixed-format weather report with Ollama enhancement.
         
-        This method demonstrates fixed automation:
-        - Uses predetermined template
-        - No customization based on weather conditions
+        This method demonstrates fixed automation with LLM enhancement:
+        - Uses predetermined template structure
+        - Enhances descriptions with Ollama
         - No decision-making about report content
-        - Fixed output format
+        - Fixed output format with AI-generated insights
         """
         print("Generating weather report...")
         
-        # Fixed report template - no adaptation
-        report = f"""
+        # Try to enhance the report with Ollama
+        try:
+            # Create a prompt for Ollama to generate weather insights
+            weather_prompt = f"""
+            Based on this weather data, provide a brief, friendly weather summary:
+            
+            Temperature: {parsed_data['temperature']}°C
+            Feels Like: {parsed_data['feels_like']}°C
+            Humidity: {parsed_data['humidity']}%
+            Pressure: {parsed_data['pressure']} hPa
+            Description: {parsed_data['description']}
+            Wind Speed: {parsed_data['wind_speed']} m/s
+            Location: {parsed_data['city']}, {parsed_data['country']}
+            
+            Provide a brief, friendly weather summary in 2-3 sentences.
+            """
+            
+            # Get AI-generated weather summary
+            ai_summary = self._call_ollama_api(
+                weather_prompt,
+                system_prompt="You are a friendly weather reporter. Provide brief, helpful weather summaries."
+            )
+            
+            # Fixed report template with AI enhancement
+            report = f"""
+WEATHER REPORT
+==============
+City: {parsed_data['city']}, {parsed_data['country']}
+Date: {parsed_data['timestamp']}
+
+Current Conditions:
+- Temperature: {parsed_data['temperature']}°C
+- Feels Like: {parsed_data['feels_like']}°C
+- Humidity: {parsed_data['humidity']}%
+- Pressure: {parsed_data['pressure']} hPa
+- Description: {parsed_data['description'].title()}
+- Wind Speed: {parsed_data['wind_speed']} m/s
+
+AI Weather Summary:
+{ai_summary.strip()}
+
+Report generated by Fixed Automation Weather Agent (Enhanced with Ollama)
+"""
+            
+        except Exception as e:
+            print(f"Ollama enhancement failed: {e}")
+            print("Falling back to basic report format...")
+            
+            # Fallback to basic report if Ollama fails
+            report = f"""
 WEATHER REPORT
 ==============
 City: {parsed_data['city']}, {parsed_data['country']}
@@ -205,6 +310,20 @@ def main():
     print("- No decision-making capabilities")
     print("- No adaptation to unexpected inputs")
     print("- High efficiency for repetitive tasks")
+    print("- Enhanced with Ollama for better report generation")
+    print()
+    
+    # Check if Ollama is running (optional enhancement)
+    try:
+        response = requests.get(f"{OLLAMA_BASE_URL}/api/tags", timeout=5)
+        if response.status_code == 200:
+            print("✅ Ollama is available - reports will be enhanced with AI")
+        else:
+            print("⚠️  Ollama not responding - using basic report format")
+    except Exception as e:
+        print("⚠️  Ollama not available - using basic report format")
+        print("   Install Ollama from https://ollama.ai/ for enhanced reports")
+    
     print()
     
     # Create and run the agent
