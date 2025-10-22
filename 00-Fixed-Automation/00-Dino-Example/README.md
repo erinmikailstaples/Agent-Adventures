@@ -54,7 +54,7 @@ graph TD
 
 ## Files in This Example
 
-- `weather_agent.py` - Main agent implementation
+- `dino_agent.py` - Main agent implementation
 - `config.py` - Configuration settings
 - `requirements.txt` - Python dependencies
 - `README.md` - This documentation
@@ -65,7 +65,7 @@ graph TD
 2. **Setup Ollama**: Run `python setup_ollama.py` to download the required model
 3. **Install dependencies**: `pip install -r requirements.txt`
 4. **Set up your API key** in `config.py` (optional)
-5. **Run the agent**: `python weather_agent.py`
+5. **Run the agent**: `python dino_agent.py`
 
 ### Quick Start with Ollama
 
@@ -80,7 +80,7 @@ python setup_ollama.py
 pip install -r requirements.txt
 
 # Run the agent
-python weather_agent.py
+python dino_agent.py
 ```
 
 ## Limitations

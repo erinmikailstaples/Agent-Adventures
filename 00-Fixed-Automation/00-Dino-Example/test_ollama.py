@@ -100,10 +100,10 @@ def test_weather_agent_integration():
     print("Testing weather agent integration...")
     
     try:
-        from weather_agent import WeatherReporterAgent
+        from dino_agent import DinosaurReporterAgent
         
         # Create agent instance
-        agent = WeatherReporterAgent()
+        agent = DinosaurReporterAgent()
         
         # Test with mock weather data
         mock_weather_data = {
@@ -187,8 +187,8 @@ def main():
         print("  • More natural language descriptions")
         print("  • Better report quality")
         print()
-        print("You can now run the weather agent:")
-        print("  python weather_agent.py")
+        print("You can now run the dino agent:")
+        print("  python dino_agent.py")
     else:
         print(f"\n⚠️  {total - passed} test(s) failed. Please check the setup.")
         print("Run 'python setup_ollama.py' to fix common issues.")

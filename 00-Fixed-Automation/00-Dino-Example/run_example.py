@@ -9,7 +9,7 @@ the characteristics of Level -1 Fixed Automation.
 import os
 import sys
 import time
-from weather_agent import WeatherReporterAgent
+from dino_agent import DinosaurReporterAgent
 from config import *
 
 def demonstrate_fixed_automation():
@@ -66,7 +66,7 @@ def demonstrate_fixed_automation():
         print("   Install Ollama from https://ollama.ai/ for enhanced reports")
     
     # Create and run the agent
-    agent = WeatherReporterAgent()
+    agent = DinosaurReporterAgent()
     
     print("Starting Fixed Automation Weather Agent...")
     print("-" * 40)

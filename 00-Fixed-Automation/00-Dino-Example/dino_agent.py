@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fixed Automation Agent Example: Weather Reporter
+Fixed Automation Agent Example: Dinosaur Reporter
 
 This is a Level -1 Fixed Automation agent that demonstrates:
 - Rigid, pre-programmed behavior
@@ -9,7 +9,7 @@ This is a Level -1 Fixed Automation agent that demonstrates:
 - High efficiency for repetitive tasks
 - Predictable, scripted behavior
 
-The agent fetches weather data and generates a simple report.
+The agent fetches dinosaur data and generates a simple report.
 """
 
 import requests
@@ -24,13 +24,15 @@ from config import (
     OUTPUT_DIR,
     OLLAMA_TIMEOUT,
     OLLAMA_STREAM,
-    OLLAMA_KEEP_ALIVE
+    OLLAMA_KEEP_ALIVE,
+    NAME,
+    DESCRIPTION
 )
 
 
-class WeatherReporterAgent:
+class DinosaurReporterAgent:
     """
-    A fixed automation agent that fetches weather data and generates reports.
+    A fixed automation agent that fetches dinosaur data and generates reports.
     
     This agent demonstrates Level -1 characteristics:
     - Follows exact, predetermined steps
@@ -43,16 +45,17 @@ class WeatherReporterAgent:
         self.ollama_base_url = OLLAMA_BASE_URL
         self.model = OLLAMA_MODEL
         self.api_key = WEATHER_API_KEY
-        self.city = CITY
+        self.name = NAME
+        self.description = DESCRIPTION
         self.output_dir = OUTPUT_DIR
-        self.base_url = "http://api.openweathermap.org/data/2.5/weather"
+        self.base_url = "https://dinosaur-facts-api.shultzlab.com/dinosaurs"
         
         # Ensure output directory exists
         os.makedirs(self.output_dir, exist_ok=True)
     
-    def fetch_weather_data(self):
+    def fetch_dino_data(self, name, description):
         """
-        Fetch weather data from OpenWeatherMap API.
+        Fetch fetch dino data from the API.
         
         This method demonstrates fixed automation:
         - Makes a single API call
@@ -60,13 +63,12 @@ class WeatherReporterAgent:
         - Fails if API is unavailable
         - No adaptation to different response formats
         """
-        print(f"Fetching weather data for {self.city}...")
+        print(f"Fetching dinosaur data...")
         
         # Fixed parameters - no adaptation possible
         params = {
-            'q': self.city,
-            'appid': self.api_key,
-            'units': 'metric'  # Fixed to metric units
+            'Name': name,
+            'Description': description,
         }
         
         # Single API call - no retry mechanism
@@ -78,9 +80,9 @@ class WeatherReporterAgent:
             # Fixed error handling - just raise exception
             raise Exception(f"API request failed with status {response.status_code}")
     
-    def parse_weather_data(self, weather_data):
+    def parse_dino_data(self, dino_data):
         """
-        Parse weather data into a fixed format.
+        Parse dinosaur data into a fixed format.
         
         This method demonstrates fixed automation:
         - Assumes specific data structure
@@ -88,19 +90,17 @@ class WeatherReporterAgent:
         - Fails if data structure changes
         - No adaptation to different data formats
         """
-        print("Parsing weather data...")
+        print("Parsing dinosaur data...")
         
         # Fixed parsing - assumes specific JSON structure
         # Will fail if API response format changes
         parsed_data = {
-            'city': weather_data['name'],
-            'country': weather_data['sys']['country'],
-            'temperature': weather_data['main']['temp'],
-            'feels_like': weather_data['main']['feels_like'],
-            'humidity': weather_data['main']['humidity'],
-            'pressure': weather_data['main']['pressure'],
-            'description': weather_data['weather'][0]['description'],
-            'wind_speed': weather_data['wind']['speed'],
+            'name': dino_data.get('name', 'Unknown'),
+            'description': dino_data.get('description', 'No description available'),
+            'period': dino_data.get('period', 'Unknown period'),
+            'diet': dino_data.get('diet', 'Unknown diet'),
+            'length': dino_data.get('length', 'Unknown length'),
+            'weight': dino_data.get('weight', 'Unknown weight'),
             'timestamp': datetime.datetime.now().isoformat()
         }
         
@@ -154,7 +154,7 @@ class WeatherReporterAgent:
     
     def generate_report(self, parsed_data):
         """
-        Generate a fixed-format weather report with Ollama enhancement.
+        Generate a fixed-format dinosaur report with Ollama enhancement.
         
         This method demonstrates fixed automation with LLM enhancement:
         - Uses predetermined template structure
@@ -162,50 +162,42 @@ class WeatherReporterAgent:
         - No decision-making about report content
         - Fixed output format with AI-generated insights
         """
-        print("Generating weather report...")
+        print("Generating dinosaur report...")
         
         # Try to enhance the report with Ollama
         try:
-            # Create a prompt for Ollama to generate weather insights
-            weather_prompt = f"""
-            Based on this weather data, provide a brief, friendly weather summary:
+            # Create a prompt for Ollama to generate dinosaur insights
+            dino_prompt = f"""
+            Based on this dinosaur data, provide a brief, friendly dinosaur summary:
             
-            Temperature: {parsed_data['temperature']}°C
-            Feels Like: {parsed_data['feels_like']}°C
-            Humidity: {parsed_data['humidity']}%
-            Pressure: {parsed_data['pressure']} hPa
+            Name: {parsed_data['name']}
             Description: {parsed_data['description']}
-            Wind Speed: {parsed_data['wind_speed']} m/s
-            Location: {parsed_data['city']}, {parsed_data['country']}
             
-            Provide a brief, friendly weather summary in 2-3 sentences.
+            Provide a brief, friendly dinosaur summary in 2-3 sentences.
             """
             
-            # Get AI-generated weather summary
+            # Get AI-generated dinosaur summary
             ai_summary = self._call_ollama_api(
-                weather_prompt,
-                system_prompt="You are a friendly weather reporter. Provide brief, helpful weather summaries."
+                dino_prompt,
+                system_prompt="You are Jeff Goldblum, respond as his character in Jurassic Park. Provide brief, interesting dinosaur summaries."
             )
             
             # Fixed report template with AI enhancement
             report = f"""
-WEATHER REPORT
-==============
-City: {parsed_data['city']}, {parsed_data['country']}
+DINOSAUR REPORT
+===============
+Name: {parsed_data['name']}
 Date: {parsed_data['timestamp']}
 
-Current Conditions:
-- Temperature: {parsed_data['temperature']}°C
-- Feels Like: {parsed_data['feels_like']}°C
-- Humidity: {parsed_data['humidity']}%
-- Pressure: {parsed_data['pressure']} hPa
-- Description: {parsed_data['description'].title()}
-- Wind Speed: {parsed_data['wind_speed']} m/s
+Dinosaur Information:
+- Name: {parsed_data['name']}
+- Description: {parsed_data['description']}
 
-AI Weather Summary:
+
+AI Dinosaur Summary:
 {ai_summary.strip()}
 
-Report generated by Fixed Automation Weather Agent (Enhanced with Ollama)
+Report generated by Fixed Automation Dinosaur Agent (Enhanced with Ollama)
 """
             
         except Exception as e:
@@ -214,20 +206,17 @@ Report generated by Fixed Automation Weather Agent (Enhanced with Ollama)
             
             # Fallback to basic report if Ollama fails
             report = f"""
-WEATHER REPORT
-==============
-City: {parsed_data['city']}, {parsed_data['country']}
+DINOSAUR REPORT
+===============
+Name: {parsed_data['name']}
 Date: {parsed_data['timestamp']}
 
-Current Conditions:
-- Temperature: {parsed_data['temperature']}°C
-- Feels Like: {parsed_data['feels_like']}°C
-- Humidity: {parsed_data['humidity']}%
-- Pressure: {parsed_data['pressure']} hPa
-- Description: {parsed_data['description'].title()}
-- Wind Speed: {parsed_data['wind_speed']} m/s
+Dinosaur Information:
+- Name: {parsed_data['name']}
+- Description: {parsed_data['description']}
 
-Report generated by Fixed Automation Weather Agent
+
+Report generated by Fixed Automation Dinosaur Agent
 """
         
         return report
@@ -238,15 +227,15 @@ Report generated by Fixed Automation Weather Agent
         
         This method demonstrates fixed automation:
         - Fixed file naming pattern
-        - No organization by date or weather type
+        - No organization by date or dinosaur type
         - No decision-making about where to save
         - Overwrites previous reports
         """
-        print("Saving weather report...")
+        print("Saving dinosaur report...")
         
         # Fixed filename pattern
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"weather_report_{timestamp}.txt"
+        filename = f"dinosaur_report_{timestamp}.txt"
         filepath = os.path.join(self.output_dir, filename)
         
         with open(filepath, 'w') as f:
@@ -265,15 +254,15 @@ Report generated by Fixed Automation Weather Agent
         - Fails on any error
         - No recovery mechanisms
         """
-        print("Starting Fixed Automation Weather Agent...")
+        print("Starting Fixed Automation Dinosaur Agent...")
         print("=" * 50)
         
         try:
-            # Step 1: Fetch weather data (fixed step)
-            weather_data = self.fetch_weather_data()
+            # Step 1: Fetch dinosaur data (fixed step)
+            dino_data = self.fetch_dino_data("Tyrannosaurus", "Large carnivorous dinosaur")
             
-            # Step 2: Parse weather data (fixed step)
-            parsed_data = self.parse_weather_data(weather_data)
+            # Step 2: Parse dinosaur data (fixed step)
+            parsed_data = self.parse_dino_data(dino_data)
             
             # Step 3: Generate report (fixed step)
             report = self.generate_report(parsed_data)
@@ -282,7 +271,7 @@ Report generated by Fixed Automation Weather Agent
             filepath = self.save_report(report)
             
             print("=" * 50)
-            print("Fixed Automation Weather Agent completed successfully!")
+            print("Fixed Automation Dinosaur Agent completed successfully!")
             print(f"Report saved to: {filepath}")
             
         except Exception as e:
@@ -296,7 +285,7 @@ Report generated by Fixed Automation Weather Agent
 
 def main():
     """
-    Main function to run the fixed automation weather agent.
+    Main function to run the fixed automation dinosaur agent.
     
     This demonstrates the simplicity and rigidity of fixed automation:
     - No configuration options
@@ -304,7 +293,7 @@ def main():
     - No decision-making
     - Just execute the predetermined workflow
     """
-    print("Fixed Automation Agent Example: Weather Reporter")
+    print("Fixed Automation Agent Example: Dinosaur Reporter")
     print("This agent demonstrates Level -1 characteristics:")
     print("- Rigid, pre-programmed behavior")
     print("- No decision-making capabilities")
@@ -327,7 +316,7 @@ def main():
     print()
     
     # Create and run the agent
-    agent = WeatherReporterAgent()
+    agent = DinosaurReporterAgent()
     success = agent.run()
     
     if success:
