@@ -19,8 +19,6 @@ import os
 from config import (
     OLLAMA_BASE_URL, 
     OLLAMA_MODEL, 
-    WEATHER_API_KEY, 
-    CITY, 
     OUTPUT_DIR,
     OLLAMA_TIMEOUT,
     OLLAMA_STREAM,
@@ -44,7 +42,6 @@ class DinosaurReporterAgent:
     def __init__(self):
         self.ollama_base_url = OLLAMA_BASE_URL
         self.model = OLLAMA_MODEL
-        self.api_key = WEATHER_API_KEY
         self.name = NAME
         self.description = DESCRIPTION
         self.output_dir = OUTPUT_DIR
@@ -75,7 +72,11 @@ class DinosaurReporterAgent:
         response = requests.get(self.base_url, params=params)
         
         if response.status_code == 200:
-            return response.json()
+            data = response.json()
+            # API returns a list, get the first dinosaur
+            if isinstance(data, list) and len(data) > 0:
+                return data[0]
+            return data
         else:
             # Fixed error handling - just raise exception
             raise Exception(f"API request failed with status {response.status_code}")
@@ -95,12 +96,8 @@ class DinosaurReporterAgent:
         # Fixed parsing - assumes specific JSON structure
         # Will fail if API response format changes
         parsed_data = {
-            'name': dino_data.get('name', 'Unknown'),
-            'description': dino_data.get('description', 'No description available'),
-            'period': dino_data.get('period', 'Unknown period'),
-            'diet': dino_data.get('diet', 'Unknown diet'),
-            'length': dino_data.get('length', 'Unknown length'),
-            'weight': dino_data.get('weight', 'Unknown weight'),
+            'name': dino_data.get('Name', 'Unknown'),
+            'description': dino_data.get('Description', 'No description available'),
             'timestamp': datetime.datetime.now().isoformat()
         }
         
